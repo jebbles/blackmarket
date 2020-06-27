@@ -7,9 +7,34 @@
       <h2 class="subtitle">
         Black market.
       </h2>
+      <ul>
+        <li :key="article.sys.id" v-for="article in articles">
+          <nuxt-link :to="`/articles/${article.sys.id}`">{{
+            article.fields.title
+          }}</nuxt-link>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
+
+<script>
+import contentful from '~/services/contentful';
+
+export default {
+  data() {
+    return {
+      articles: []
+    };
+  },
+  async created() {
+    const response = await contentful.getEntries({
+      content_type: 'article'
+    });
+    this.articles = response.items;
+  }
+};
+</script>
 
 <style>
 .container {
